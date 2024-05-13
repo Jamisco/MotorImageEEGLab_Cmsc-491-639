@@ -1,0 +1,53 @@
+https://www.nature.com/articles/sdata2018211#Sec20
+
+Hand movements of limbs are located in:  9, 10, 13, 14, and 11 sites of the standard 10/20 international system
+
+We are using CLA paradigm: Classical (CLA) left/right hand motor imagery(MI)
+
+For each of Trial
+	- Action signal indicating LH, RH or cicle (passive imagery) is shown for 1 second, during which
+		- Subject selects imagery to implement
+		- Imagery is implementing by imagining closing and opening the respective fist once
+		- Passive imagery means subject did not engage in any voluntary mental imagery until next Trial
+
+	- After implemented imagery, subject waits for next trial
+
+Time
+	- 1 second to implement action
+	- 1 second wait for stimulus to disappear
+	- (1.5 - 2.5) random off duration before next trial
+
+	- 3 seconds on average per trial, 300 trials done, 15 minutes total per segment
+
+
+- Synchronization 
+	- Upon each new presentation of a visual action signal, 
+	eGUI forwarded a 500 ms 1 μV pulse signal via the computer’s USB port and Arduino Uno microcontroller to the EEG-1200 X3 bipolar input. 
+	The signal was subsequently recorded by Neurofax in the 22nd input channel, 
+	appearing in the EEG data record as a series of on/off spikes separated by 500 ms, 
+	at the beginning and end of each action signal. 
+	This signal was perfectly synchronized with the EEG data and used to align the EEG data samples and the interaction record data maintained by Matlab eGUI.
+	
+	
+	1. Fp1 (Frontopolar, left hemisphere)
+	2. Fp2 (Frontopolar, right hemisphere)
+	3. F7 (Frontal, left hemisphere)
+	4. F3 (Frontal, left hemisphere)
+	5. Fz (Frontal, midline)
+	6. F4 (Frontal, right hemisphere)
+	7. F8 (Frontal, right hemisphere)
+	8. T3 (Temporal, left hemisphere)
+	9. C3 (Central, left hemisphere)
+	10. Cz (Central, midline)
+	11. C4 (Central, right hemisphere)
+	12. T4 (Temporal, right hemisphere)
+	13. T5 (Temporal/parietal, left hemisphere)
+	14. P3 (Parietal, left hemisphere)
+	15. Pz (Parietal, midline)
+	16. P4 (Parietal, right hemisphere)
+	17. T6 (Temporal/parietal, right hemisphere)
+	18. O1 (Occipital, left hemisphere)
+	19. O2 (Occipital, right hemisphere)
+	20. A1 (Reference electrode, left ear)
+	21. A2 (Reference electrode, right ear)
+	22. X3 (Bipolar lead for data synchronization)

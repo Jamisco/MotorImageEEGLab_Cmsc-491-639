@@ -1,0 +1,7 @@
+SubjectData_Processed/
+EpochToTxt.m
+epoch_ranges.mat
+electrode-names.sxyz
+electrode-names.spinv
+oldSets.set
+oldSets.fdt
