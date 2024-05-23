@@ -1,7 +1,8 @@
-SubjectData_Processed/
 EpochToTxt.m
 epoch_ranges.mat
 electrode-names.sxyz
 electrode-names.spinv
 oldSets.set
 oldSets.fdt
+SubjectData_Processed/Process1
+SubjectData_Processed/Process2

@@ -21,10 +21,12 @@ total1 = 0;
 total2 = 0;
 total3 = 0;
 
-channel2Remove = [1,2,3,4,5,6,7,12,13,14,15,16,17,18,19,20,21];
+channel2Remove = [1,2,3,4,7,8,11,12,13,14,17,18,19,20,21];
 
-sI = epochs{1}(1);
+sI = epochs{1}(2);
 relaxedEpoch = eeg_data(1:sI, :);
+relaxedEpoch = RemoveChannels(relaxedEpoch, channel2Remove);
+relaxedEpoch = [relaxedEpoch; filler];
 
 % Loop over each epoch range
 for i = 1:numel(epochs)
@@ -42,6 +44,13 @@ for i = 1:numel(epochs)
     eeg_data_epoch = RemoveChannels(eeg_data_epoch, channel2Remove);
 
     eeg_data_epoch = [eeg_data_epoch; filler];
+
+    if i == 1
+        % the first index is the resting state. We add to start of all
+        % markers
+        continue;
+    end
+
     % Add EEG data to the proper data group based on the marker state
     switch marker_state
         case 1
@@ -72,9 +81,15 @@ g1 = g1(1:total1, :);
 g2 = g2(1:total2, :);
 g3 = g3(1:total3, :);
 
-[r,p1] = EpochPlotter(relaxedEpoch, g1);
-[r,p2] = EpochPlotter(relaxedEpoch, g2);
-[r,p3] = EpochPlotter(relaxedEpoch, g3);
+[r,p1,p2,p3] = EpochPlotter(relaxedEpoch, g1, g2, g3);
+
+% % we add the relaxed state at the start of each epoch so they can be
+% % processed in eeglab
+% g1 = [relaxedEpoch; g1];
+% g2 = [relaxedEpoch; g2];
+% g3 = [relaxedEpoch; g3];
+
+p4 = [r;p1;p2;p3]; 
 
 savePath = char(savePath);
 
@@ -82,56 +97,20 @@ if ~isfolder(savePath)
     mkdir(savePath);
 end
 
-CreatePlot(r,p1);
-sp = [savePath, '\PlotPicture1.png'];
+CreatePlot(r,p1,p2,p3);
+sp = [savePath, '\PlotPicture.png'];
 saveas(gcf, sp);
 close(gcf);
 
-CreatePlot(r,p2);
-sp = [savePath, '\PlotPicture2.png'];
-saveas(gcf, sp);
-close(gcf);
 
-CreatePlot(r,p3);
-sp = [savePath, '\PlotPicture3.png'];
-saveas(gcf, sp);
-close(gcf);
+dlmwrite(fullfile(savePath, 'RelaxedState.txt'), relaxedEpoch, 'delimiter', '\t');
+dlmwrite(fullfile(savePath, 'EpochData1.txt'), g1, 'delimiter', '\t');
+dlmwrite(fullfile(savePath, 'EpochData2.txt'), g2, 'delimiter', '\t');
+dlmwrite(fullfile(savePath, 'EpochData3.txt'), g3, 'delimiter', '\t');
 
-% dlmwrite(fullfile(savePath, 'EpochData1.txt'), g1, 'delimiter', '\t');
-% dlmwrite(fullfile(savePath, 'EpochData2.txt'), g2, 'delimiter', '\t');
-% dlmwrite(fullfile(savePath, 'EpochData3.txt'), g3, 'delimiter', '\t');
-
-dlmwrite(fullfile(savePath, 'PlotData1.txt'), p1, 'delimiter', '\t');
-dlmwrite(fullfile(savePath, 'PlotData2.txt'), p2, 'delimiter', '\t');
-dlmwrite(fullfile(savePath, 'PlotData2.txt'), p3, 'delimiter', '\t');
+dlmwrite(fullfile(savePath, 'PlotDatas.txt'), p4, 'delimiter', '\t');
 
 end
-
-function CreatePlot(relaxedData, avgData)
-
-% Specify the x-axis labels
-x_labels = {'C3', 'C4', 'Cz', 'T3', 'T4'};
-
-% Plot the relaxedData with blue color and circle markers
-plot(relaxedData, 'bo-', 'DisplayName', 'Relaxed Data');
-hold on;  % Hold the plot to overlay the next plot
-
-% Plot the avgData with red color and square markers
-plot(avgData, 'rs-', 'DisplayName', 'Average Data');
-
-% Customize the x-axis labels
-xticks(1:numel(x_labels));  % Set the x-axis tick positions
-xticklabels(x_labels);      % Set the x-axis tick labels
-
-% Add labels, title, and legend
-xlabel('Channels');
-ylabel('Values');
-title('Comparison of Relaxed and Average EEG Data');
-legend('Location', 'best');  % Show legend with best position
-
-end
-
-
 
 function result = RemoveChannels(matrix, col_indices)
 

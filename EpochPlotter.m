@@ -1,29 +1,38 @@
 
-function [relaxPlot, epochPlot] = EpochPlotter(refData, epochs)
+function [relaxPlot, p1, p2, p3] = EpochPlotter(refData, e1, e2, e3)
 
-% c3, c4, cz, t3, t4
-index = [8, 9, 10, 11];
+% c3, c4, t3, t4 channel. This channel are related to hand data
+index = [5,6,9,10,15,16];
 
 relaxedAvg = zeros(1, 4);
 
-for i = 1:4
+for i = 1:numel(index)
     relaxedAvg(i) = GetColAvg_TrimPercent(refData, index(i));
 end
 
 relaxPlot = relaxedAvg;
 
-epochAvg = zeros(1, 4);
+e1Avg = zeros(1, 4);
+e2Avg = zeros(1, 4);
+e3Avg = zeros(1, 4);
 
-for x = 1:4
+for x = 1:numel(index)
 
     colIndex = index(x);
-    eVal = GetColAvg_TrimPercent(epochs, colIndex);
+    eVal1 = GetColAvg_TrimPercent(e1, colIndex);
+    eVal2 = GetColAvg_TrimPercent(e2, colIndex);
+    eVal3 = GetColAvg_TrimPercent(e3, colIndex);
 
-    %epochAvg(x) = eVal;
-    epochAvg(x) = abs(relaxedAvg(x) - eVal);
+    e1Avg(x) = eVal1;
+    e2Avg(x) = eVal2;
+    e3Avg(x) = eVal3;
+
+    %e1Avg(x) = abs(relaxedAvg(x) + eVal);
 end
 
-epochPlot = epochAvg;
+p1 = e1Avg;
+p2 = e2Avg;
+p3 = e3Avg;
 
 end
 
@@ -49,7 +58,7 @@ end
 
 % will fine the mean, Will remove the top and bottom x percent of values
 function column_average = GetColAvg_TrimPercent(matrix, column_index)
-    trim_percent = .02;
+    trim_percent = 0;
     
     % Extract the specified column
     column_values = matrix(:, column_index);
